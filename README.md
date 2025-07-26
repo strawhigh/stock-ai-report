@@ -10,7 +10,7 @@
   <div id="stock-info"></div>
 
   <script>
-    const stockSymbol = 'AAPL'; // 想查哪支股就改成代號，支援台美股
+    const stockSymbol = '0050'; // 想查哪支股就改成代號，支援台美股
     const apiKey = '5cf6536c709248709723a7a9c13648d8';
 
     async function fetchStockPrice() {
