@@ -1,28 +1,34 @@
 # stock-ai-report
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <title>Plan D 股票快報</title>
-</head>
 <body>
-  <h1>Plan D 股票快報（美股）</h1>
-  <div id="stock-info">載入中...</div>
+  <h1>Plan D 股票報告</h1>
+  <div id="stock-info"></div>
 
   <script>
-    const apiKey = "你的API_KEY"; // ← 自己註冊 Twelve Data 後取得
-    const symbols = ["AAPL", "MSFT", "GOOGL", "TSLA"]; // 自訂你要的股票代碼
+    const stockSymbol = 'AAPL'; // 你可以改成 'TSLA', 'MSFT' 等
+    const apiKey = '5cf6536c709248709723a7a9c13648d8';
 
-    async function fetchStockData() {
-      const stockInfoDiv = document.getElementById("stock-info");
-      stockInfoDiv.innerHTML = "";
+    async function fetchStockPrice() {
+      const url = `https://api.twelvedata.com/price?symbol=${stockSymbol}&apikey=${apiKey}`;
 
-      for (let symbol of symbols) {
-        const url = `https://api.twelvedata.com/price?symbol=${symbol}&apikey=${apiKey}`;
-        try {
-          const res = await fetch(url);
-          const data = await res.json();
-          stockInfoDiv.innerHTML += `<p>${symbol}: $${data.price}</p>`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.price) {
+          document.getElementById('stock-info').innerText =
+            `${stockSymbol} 現價：$${data.price}`;
+        } else {
+          document.getElementById('stock-info').innerText =
+            `錯誤：${JSON.stringify(data)}`;
+        }
+      } catch (error) {
+        document.getElementById('stock-info').innerText =
+          '資料載入失敗';
+      }
+    }
+
+    fetchStockPrice();
+  </script>
+</body>v.innerHTML += `<p>${symbol}: $${data.price}</p>`;
         } catch (err) {
           stockInfoDiv.innerHTML += `<p>${symbol}: 讀取失敗</p>`;
         }
