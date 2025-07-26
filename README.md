@@ -11,10 +11,10 @@
 
   <script>
     const stockSymbol = 'AAPL'; // 台股記得加 .TW
-    const apiKey = '5cf6536c709248709723a7a9c13648d8';
+const apiKey = '5cf6536c709248709723a7a9c13648d8'; // 字串！
 
     async function fetchStockPrice() {
-      const url = `https://api.twelvedata.com/price?symbol=${stockSymbol}&apikey=${5cf6536c709248709723a7a9c13648d8}`;
+const url = `https://api.twelvedata.com/price?symbol=${stockSymbol}&apikey=${5cf6536c709248709723a7a9c13648d8}`;
 
       try {
         const response = await fetch(url);
