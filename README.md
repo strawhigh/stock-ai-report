@@ -1,16 +1,16 @@
 # stock-ai-report
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Plan D 股票快報</title>
+  <meta charset="utf-8">
+  <title>Plan D 股票報告</title>
 </head>
 <body>
-  <h1>Plan D 股票快報（美股）</h1>
-  <div id="stock-info"></div>
+  <h1>Plan D 股票報告</h1>
+  <div id="stock-info">載入中...</div>
 
   <script>
-    const stockSymbol = '0050'; // 想查哪支股就改成代號，支援台美股
+    const stockSymbol = '0050.TW'; // 台股記得加 .TW
     const apiKey = '5cf6536c709248709723a7a9c13648d8';
 
     async function fetchStockPrice() {
@@ -27,8 +27,7 @@
             `錯誤：${JSON.stringify(data)}`;
         }
       } catch (error) {
-        document.getElementById('stock-info').innerText =
-          '資料載入失敗';
+        document.getElementById('stock-info').innerText = '資料載入失敗';
       }
     }
 
