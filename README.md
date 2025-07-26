@@ -1,10 +1,16 @@
 # stock-ai-report
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>Plan D 股票快報</title>
+</head>
 <body>
-  <h1>Plan D 股票報告</h1>
+  <h1>Plan D 股票快報（美股）</h1>
   <div id="stock-info"></div>
 
   <script>
-    const stockSymbol = 'AAPL'; // 你可以改成 'TSLA', 'MSFT' 等
+    const stockSymbol = 'AAPL'; // 想查哪支股就改成代號，支援台美股
     const apiKey = '5cf6536c709248709723a7a9c13648d8';
 
     async function fetchStockPrice() {
@@ -27,15 +33,6 @@
     }
 
     fetchStockPrice();
-  </script>
-</body>v.innerHTML += `<p>${symbol}: $${data.price}</p>`;
-        } catch (err) {
-          stockInfoDiv.innerHTML += `<p>${symbol}: 讀取失敗</p>`;
-        }
-      }
-    }
-
-    fetchStockData();
   </script>
 </body>
 </html>
