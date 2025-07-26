@@ -10,7 +10,7 @@
   <div id="stock-info">載入中...</div>
 
   <script>
-    const stockSymbol = '0050.TW'; // 台股記得加 .TW
+    const stockSymbol = 'AAPL'; // 台股記得加 .TW
     const apiKey = '5cf6536c709248709723a7a9c13648d8';
 
     async function fetchStockPrice() {
