@@ -1,37 +1,52 @@
-# stock-ai-report
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Plan D 股票報告</title>
-</head>
-<body>
-  <h1>Plan D 股票報告</h1>
-  <div id="stock-info">載入中...</div>
 
-  <script>
-    const stockSymbol = 'AAPL'; // 台股記得加 .TW
-const apiKey = '5cf6536c709248709723a7a9c13648d8'; // 字串！
+import requests
+from datetime import datetime
+import os
 
-    async function fetchStockPrice() {
-const url = `https://api.twelvedata.com/price?symbol=AAPL&apikey=5cf6536c709248709723a7a9c13648d8;
+# FinMind API 設定
+api_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRlIjoiMjAyNS0wNy0yNyAwMDowMTozNiIsInVzZXJfaWQiOiJTdHJhd2hpZ2giLCJpcCI6IjU5LjExNS4xNy4yMCJ9.la5mV6ZY1uqWeuY8kSlqnwyxyldSAp6eA8OKmEBcvjc"
+api_url = "https://api.finmindtrade.com/api/v4/data"
 
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        if (data.price) {
-          document.getElementById('stock-info').innerText =
-            `${stockSymbol} 現價：$${data.price}`;
-        } else {
-          document.getElementById('stock-info').innerText =
-            `錯誤：${JSON.stringify(data)}`;
-        }
-      } catch (error) {
-        document.getElementById('stock-info').innerText = '資料載入失敗';
-      }
+# 股票清單（可依需求增減）
+stocks = [
+    {"name": "世芯-KY", "code": "3661"},
+    {"name": "乙盛-KY", "code": "5243"},
+    {"name": "弘格", "code": "6696"},
+]
+
+# Telegram 設定
+telegram_token = os.getenv("TELEGRAM_TOKEN")
+chat_id = "7962664337"
+
+def fetch_price(code):
+    today = datetime.now().strftime("%Y-%m-%d")
+    payload = {
+        "dataset": "TaiwanStockPrice",
+        "data_id": code,
+        "start_date": today,
+        "end_date": today,
+        "token": api_token
     }
+    r = requests.get(api_url, params=payload)
+    data = r.json().get("data", [])
+    if not data:
+        return None
+    return float(data[0]["open"]), float(data[0]["close"])
 
-    fetchStockPrice();
-  </script>
-</body>
-</html>
+def send_telegram(message):
+    url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
+    payload = {"chat_id": chat_id, "text": message}
+    requests.post(url, data=payload)
+
+def main():
+    for stock in stocks:
+        result = fetch_price(stock["code"])
+        if result:
+            open_price, close_price = result
+            pct = (close_price - open_price) / open_price * 100
+            if abs(pct) >= 3:
+                msg = f"{stock['name']}（{stock['code']}）今日漲跌幅：{pct:.2f}%"
+                send_telegram(msg)
+
+if __name__ == "__main__":
+    main()
